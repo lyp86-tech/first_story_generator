@@ -1,3 +1,5 @@
+#首先在环境中安装依赖：pip install langchain langchain-openai streamlit 
+
 import os
 import streamlit as st
 from langchain_core.prompts import ChatPromptTemplate
@@ -5,10 +7,11 @@ from langchain_openai import ChatOpenAI
 
 DEFAULT_API_KEY = "sk-ee72ed73b1bf4a2bbe867660fcfe52b2"  # 替换为有效密钥
 
-  
+#一、界面设置
+
 # 设置页面标题和图标
 st.set_page_config(
-    page_title="中文故事生成器",
+    page_title="刘艳平LLM学习",
     page_icon="📖",
     layout="centered"
 )
@@ -21,7 +24,21 @@ with st.sidebar:
 
 # 页面主标题
 st.title("📖 中文故事生成器")
+st.subheader("刘艳平LLM学习测试")
 st.caption("输入关键词，生成一个完整的中文小故事")
+
+
+# 用户输入界面
+col1, col2 = st.columns([4, 1])
+with col1:
+    user_input = st.text_input("请输入故事关键词（用逗号分隔）:", placeholder="例如：夏天, 冰淇淋, 友谊")
+
+with col2:
+    st.write("")
+    st.write("")
+    generate_btn = st.button("生成故事")
+
+#二、模型设置
 
 # 定义提示模板
 STORY_PROMPT = ChatPromptTemplate.from_template(
@@ -51,19 +68,8 @@ def get_response(keywords):
     chain = STORY_PROMPT | model
     return chain.invoke({"keywords": keywords}).content
 
-# 用户输入界面
-col1, col2 = st.columns([4, 1])
-with col1:
-    user_input = st.text_input("请输入故事关键词（用逗号分隔）:", placeholder="例如：夏天, 冰淇淋, 友谊")
+#三、处理生成逻辑
 
-with col2:
-    st.write("")
-    st.write("")
-    generate_btn = st.button("生成故事")
-
-
-
-# 处理生成逻辑
 if generate_btn:
     
     if not deepseek_api_key:
